@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>மின்னொளி - Splash, Login, Selection & Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kavivanar&family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#005b7d",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "on-background": "#1a1b21",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#ffe088",
+                    "surface": "#faf8ff",
+                    "on-tertiary-fixed": "#241a00",
+                    "surface-bright": "#faf8ff",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#614eb2",
+                    "surface-dim": "#dad9e1",
+                    "surface-container": "#eeedf5",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#c5e7ff",
+                    "surface-container-highest": "#e2e2e9",
+                    "surface-variant": "#e2e2e9",
+                    "surface-container-low": "#f4f3fb",
+                    "on-primary-container": "#331a82",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-primary-fixed-variant": "#493598",
+                    "primary": "#614eb2",
+                    "inverse-primary": "#cbbeff",
+                    "primary-container": "#9d8af2",
+                    "outline-variant": "#c9c4d4",
+                    "on-primary-fixed": "#1d0061",
+                    "tertiary": "#735c00",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#00658b",
+                    "inverse-on-surface": "#f1f0f8",
+                    "surface-container-high": "#e8e7ef",
+                    "secondary-fixed-dim": "#84cffc",
+                    "background": "#faf8ff",
+                    "outline": "#797583",
+                    "on-surface-variant": "#484552",
+                    "primary-fixed-dim": "#cbbeff",
+                    "secondary-container": "#87d2fe",
+                    "primary-fixed": "#e6deff",
+                    "on-secondary-fixed-variant": "#004c6a",
+                    "inverse-surface": "#2f3036",
+                    "tertiary-container": "#caa83a",
+                    "on-secondary-fixed": "#001e2d",
+                    "on-surface": "#1a1b21",
+                    "on-tertiary-container": "#4f3e00",
+                    "tertiary-fixed-dim": "#e7c353",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-desktop": "40px",
+                    "unit": "8px",
+                    "section-gap": "32px",
+                    "container-padding-mobile": "20px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline": ["Kavivanar", "cursive"],
+                    "body": ["Mukta", "sans-serif"],
+                    "body-md": ["Mukta", "sans-serif"],
+                    "label-lg": ["Mukta", "sans-serif"],
+                    "headline-md": ["Kavivanar", "cursive"],
+                    "headline-lg-mobile": ["Kavivanar", "cursive"],
+                    "label-sm": ["Mukta", "sans-serif"],
+                    "headline-lg": ["Kavivanar", "cursive"],
+                    "display-lg": ["Kavivanar", "cursive"],
+                    "body-lg": ["Mukta", "sans-serif"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #faf8ff;
+        }
+
+        /* Screen transitions */
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.98);
+        }
+
+        .screen.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Splash Screen (Image 1) */
+        .clay-container {
+            position: relative;
+            background: linear-gradient(135deg, #f3efff 0%, #dbe9ff 100%);
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        /* Glassmorphic Splash Card matching Image 1 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 2.5rem;
+            box-shadow: 0 30px 60px rgba(97, 78, 178, 0.1),
+                        inset 0 4px 20px rgba(255, 255, 255, 0.3);
+            width: 90%;
+            max-width: 360px;
+            height: 60vh;
+            max-height: 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 40px 80px rgba(97, 78, 178, 0.15);
+        }
+
+        .logo-img {
+            width: 260px;
+            height: 260px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(97, 78, 178, 0.15));
+        }
+
+        .loading-track {
+            width: 140px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 9999px;
+            position: relative;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05), inset -1px -1px 3px rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.4);
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            position: absolute;
+            height: 100%;
+            background: #614eb2;
+            border-radius: 9999px;
+            width: 0%;
+            box-shadow: 0 1px 3px rgba(97,78,178,0.3);
+            animation: fillProgress 2.5s ease-in-out infinite;
+        }
+
+        @keyframes fillProgress {
+            0% { width: 0%; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0%; left: 100%; }
+        }
+
+        /* Login Screen (Image 2) */
+        .login-body {
+            background: radial-gradient(circle at 20% 20%, #f1ecff 0%, #e6deff 100%);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        .clay-card {
+            background-color: #ffffff;
+            box-shadow: 0 20px 40px rgba(97, 78, 178, 0.12);
+            position: relative;
+            z-index: 10;
+            border-radius: 2rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .clay-inset {
+            background: #f4f3fb;
+            box-shadow: inset -3px -3px 6px rgba(255, 255, 255, 1),
+                        inset 3px 3px 6px rgba(97, 78, 178, 0.1);
+            border: 1px solid rgba(97, 78, 178, 0.05);
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .clay-button {
+            background: linear-gradient(135deg, #7864d6 0%, #614eb2 100%);
+            box-shadow: 0 10px 25px rgba(97, 78, 178, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .clay-button:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 12px rgba(97, 78, 178, 0.4);
+        }
+
+        .clay-button-primary {
+            box-shadow: 0 4px 10px rgba(97, 78, 178, 0.2);
+            background-color: #614eb2;
+            position: relative;
+        }
+
+        .clay-button-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.3), inset 2px 2px 4px rgba(0, 0, 0, 0.15);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .floating {
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .avatar-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Dashboard & App styling */
+        .dashboard-body {
+            background-color: #faf8ff;
+            overflow-y: auto;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        /* Category Card Morphisms */
+        .dashboard-card {
+            border-radius: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(97, 78, 178, 0.1);
+        }
+
+        .dashboard-card:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+
+    <!-- Splash Screen (Image 1) -->
+    <div id="splash-screen" class="screen visible">
+        <main class="clay-container">
+            <!-- Background Decorative Blobs -->
+            <div class="blob w-96 h-96 bg-primary-fixed-dim -top-20 -left-20"></div>
+            <div class="blob w-80 h-80 bg-secondary-container -bottom-10 -right-10" style="animation-delay: -2s;"></div>
+            <div class="blob w-64 h-64 bg-tertiary-fixed-dim top-1/2 left-1/4" style="animation-delay: -5s;"></div>
+            
+            <!-- Glassmorphic Card Container -->
+            <div class="glass-card">
+                <img alt="மின்னொளி Logo" class="logo-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLYlGv8F0QrEDgv7A6GlnA5hRTRodj_dAfWNp7sopftgHYZPSPb9NXBT_58A39T1i2mY0yOltytabmb2Ef-G6_NAayHK5_yzIKh1ZXBARLIV9tpQN641V6tYorC5qBQsd6Z8kLM4xr_kT_YRk6T5FdyEoy8nZEMn8pUpfANbF5Y63GU56rSZjhebzxLqeNFCc2HHQiq5y7tPPjPd0hBbHwYYgTZZjuvFHJGXv-fSu7Vnab5cBOzaHRDO9yKMyC6QdeOxFk5q-DzOU"/>
+            </div>
+            
+            <!-- Animated Loading State (Below Card) -->
+            <div class="mt-12 flex flex-col items-center z-10">
+                <div aria-hidden="true" class="loading-track">
+                    <div class="loading-bar"></div>
+                </div>
+                <p class="mt-4 text-[#614eb2] font-semibold text-lg opacity-85">
+                    தயாராகிறது...
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Screen (Image 2) -->
+    <div id="login-screen" class="screen hidden login-body p-container-padding-mobile flex flex-col items-center">
+        <!-- Atmospheric Elements -->
+        <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+            <!-- Top-Left Rotated Purple Pencil -->
+            <div class="absolute top-10 left-8 text-[#9d8af2] floating" style="animation-delay: 0.2s">
+                <span class="material-symbols-outlined text-[64px] inline-block transform -rotate-45" style="font-variation-settings: 'FILL' 1;">edit</span>
+            </div>
+            <!-- Top-Right Yellow Lightbulb -->
+            <div class="absolute top-36 right-8 text-[#e7c353] floating" style="animation-delay: 0.5s">
+                <span class="material-symbols-outlined text-[72px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+            </div>
+            <!-- Bottom-Left Blue Book -->
+            <div class="absolute bottom-24 left-8 text-[#87d2fe] floating" style="animation-delay: 1.2s">
+                <span class="material-symbols-outlined text-[56px]" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+            </div>
+            <!-- Bottom-Right Cloud -->
+            <div class="absolute bottom-40 right-12 text-[#614eb2] opacity-10 floating" style="animation-delay: 0.8s">
+                <span class="material-symbols-outlined text-[130px]">cloud</span>
+            </div>
+        </div>
+        
+        <!-- Main Mobile Container (Centered) -->
+        <main class="w-full max-w-[400px] relative my-auto py-8 z-10">
+            <!-- Character Mascot with Double Ring & Overlapping Badge (Image 2) -->
+            <div class="w-full flex justify-center -mb-8 relative z-30">
+                <div class="w-48 h-48 rounded-full border-2 border-[#614eb2]/10 p-1.5 flex items-center justify-center bg-transparent relative">
+                    <!-- Inner Circular Image Container with White Border -->
+                    <div class="w-full h-full rounded-full border-4 border-white shadow-xl overflow-hidden bg-white flex items-center justify-center">
+                        <img alt="Indian mother and son illustration" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABm_gd3RWss2H-EFdd-Iea53rLPPqffgbcnvCIsoyG2VJPZLe7WIe06j0LeaWN1D1rgYNWQ2n804W4CyuYI00Ve13-H5ynlpBJdv4a_kWBVDZ7BnzMFAQNV783EZ2DNk1qS03eoKz-FNCYKq2TDOiJyS44AZN2ws-gjq5FUQT4zPtwTFFf7-bN_fylTo3R_ESfZ3Y_Z_gtvX-ZqRXpIhPteBfF_68p85wkGkhi6M_K_6GXTpOD2s55hJTZvqPf8Ja7ECMrFZilO-E"/>
+                    </div>
+                    <!-- Overlapping Pill Badge -->
+                    <div class="absolute -bottom-1 bg-[#e6deff] text-[#614eb2] border-2 border-white px-6 py-1 rounded-full shadow-md font-bold text-[14px] tracking-wide whitespace-nowrap">
+                        கற்கலாம்!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Login Card -->
+            <div class="clay-card p-8 pt-12 flex flex-col items-center">
+                <header class="text-center mb-8">
+                    <h1 class="text-3xl text-[#614eb2] font-semibold tracking-tight mb-2 font-headline">மின்னொளி</h1>
+                    <p class="font-body-md text-on-surface-variant">உங்கள் பயணத்தைத் தொடர உள்நுழையவும்</p>
+                </header>
+                
+                <form id="login-form" class="w-full space-y-5" onsubmit="event.preventDefault()">
+                    <!-- Username Field -->
+                    <div class="space-y-2">
+                        <label class="block font-label-lg text-on-surface-variant ml-2">பெயர்</label>
+                        <div class="clay-inset flex items-center px-4 py-3.5 rounded-full group">
+                            <span class="material-symbols-outlined text-primary mr-3">person</span>
+                            <input id="username-input" class="bg-transparent border-none outline-none focus:ring-0 w-full text-on-surface font-body-md placeholder:text-outline-variant p-0" placeholder="பயனர் பெயர்" type="text" required/>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Field -->
+                    <div class="space-y-2">
+                        <label class="block font-label-lg text-on-surface-variant ml-2">கைபேசி எண்</label>
+                        <div class="clay-inset flex items-center px-4 py-3.5 rounded-full group">
+                            <span class="material-symbols-outlined text-primary mr-3">call</span>
+                            <input id="phone-input" class="bg-transparent border-none outline-none focus:ring-0 w-full text-on-surface font-body-md placeholder:text-outline-variant p-0" placeholder="98765 43210" type="tel" pattern="[0-9]{10}" title="தயவுசெய்து 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்" required/>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button class="clay-button w-full py-4 rounded-full text-on-primary font-headline text-lg" type="submit">
+                            உள்நுழைக
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-8 pt-6 border-t border-surface-container-highest w-full text-center">
+                    <p class="text-on-surface-variant font-label-lg mb-2">இன்னும் கணக்கு இல்லையா?</p>
+                    <a class="text-primary font-label-lg hover:underline transition-all font-semibold" href="#">
+                        புதிய கணக்கை உருவாக்க
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Footer / Credits -->
+            <footer class="mt-8 text-center text-on-surface-variant opacity-60">
+                <p class="text-sm">© 2024 மின்னொளி கல்வி நிறுவனம்</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- User Selection Screen (New Screen between Login & Dashboard) -->
+    <div id="selection-screen" class="screen hidden bg-[#faf8ff] flex flex-col items-center p-container-padding-mobile">
+        <!-- Top App Bar -->
+        <header class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] z-50 flex items-center justify-between px-container-padding-mobile py-3 bg-white/80 backdrop-blur-md shadow-sm border-b border-surface-container">
+            <button class="w-10 h-10 flex items-center justify-center text-primary active:scale-95 transition-transform rounded-full hover:bg-surface-container-low">
+                <span class="material-symbols-outlined text-[28px]">menu</span>
+            </button>
+            <h1 class="text-xl font-bold text-primary font-headline">மின்னொளி</h1>
+            <div class="w-10 h-10 rounded-full overflow-hidden border border-primary/20 shadow-sm">
+                <img alt="User Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUuFb70WyLlloC7lHWljzHCI-JNd4hbAmDINiTkE07v6tAjPcv6TRFV0Sb0KHTMdxYbev-bTPSh3zgOLBD76tDfXSUb9WYhk0X-S1PY1s1BhgvCDX0KLsyOCc2PfauJ5k78BWGX1iXnsndMDgNaI8z0IWw7p3qcjcRv0QBQGBRIRTjE86es5OY5B8GlcsWArHZ2zBsRQV6BufLofwH3Jul1RxpeKAbW9wLiI0Fkv19Iii5Gp1LnG3pGZWyHRofMVG3DeAh3x9StHU"/>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <main class="w-full max-w-[400px] mx-auto pt-24 pb-32 flex flex-col gap-6 z-10">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl text-primary font-headline" id="selection-user-greeting">யார் நீங்கள்?</h2>
+                <p class="text-on-surface-variant text-sm">உங்களுக்குப் பொருத்தமான ஒரு வகையைத் தேர்ந்தெடுக்கவும்</p>
+            </div>
+
+            <!-- Selection Cards stacked vertically (student below women, compact size) -->
+            <div class="flex flex-col gap-4 w-full max-w-[280px] mx-auto">
+                <!-- Women Selection Card -->
+                <button onclick="selectUserRole('women')" class="clay-card group flex flex-col items-center p-4 w-full text-center hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <div class="w-24 h-24 mb-3 avatar-float flex items-center justify-center">
+                        <img alt="பெண்கள் (Women)" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSfKnA9A0zpRgkfOfJTbWoiyYoineWvyyDItYPa24aSbz_BIazgPlk8RKmVBRA5TwonQGFdqWDzRLinOzDZ9uy_kAPQCGUFKSqsAY50DPAVaIivgcQs1ro6pn7aUod_ApZ293httgUROcgjWQGfsq_gbanB1kUvOWgf5iItjZa2ZxGL91ViNTschrisi-dwzKkOWo0_DqAXGO8TG5znAQmB26tpZu9jPc3a_7Q0Be8qbufFUvCrqJBhJ574efGD4a4fUAw68Wb3VI"/>
+                    </div>
+                    <div>
+                        <h3 class="font-headline text-md text-primary mb-0.5">பெண்கள்</h3>
+                        <p class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider">Women</p>
+                    </div>
+                    <div class="mt-4 w-8 h-8 rounded-full clay-button-primary flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </div>
+                </button>
+
+                <!-- Students Selection Card -->
+                <button onclick="selectUserRole('students')" class="clay-card group flex flex-col items-center p-4 w-full text-center hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <div class="w-24 h-24 mb-3 avatar-float flex items-center justify-center" style="animation-delay: -2s;">
+                        <img alt="மாணவர்கள் (Students)" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrg70oY3VZxEAhoaC7uiz2e5zcCdMlN8t0IncmV7uezSgwtDXjyXz6m4IgAJKMan8VrYptzxvrvTG2RBbbYorKgCkWFk0URdPI2Hg0hsEnA-No33m01TMt974LGsQS0byVpyhg9_AdjV5ViyjWIyoitj554GcNjiDxdWUPtayfEpfeaqJMp0Hwwp-t86kJA-A5Fl7bc6tT-YuDwl4x2KjfEjHZEeG3NyJjjZOwIGAH52TE5ZlwD0-KWay0tpEAP70ZXtVG3jCIv2w"/>
+                    </div>
+                    <div>
+                        <h3 class="font-headline text-md text-primary mb-0.5">மாணவர்கள்</h3>
+                        <p class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider">Students</p>
+                    </div>
+                    <div class="mt-4 w-8 h-8 rounded-full clay-button-primary flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Back navigation link -->
+            <div class="text-center pt-4">
+                <button onclick="goBackToLogin()" class="text-primary font-semibold text-sm hover:underline active:scale-95 transition-transform">
+                    மீண்டும் உள்நுழைய வேண்டுமா?
+                </button>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation Bar (Centered) -->
+        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#f4f3fb] rounded-t-3xl shadow-[0_-8px_24px_rgba(97,78,178,0.1)] border-t border-[#c9c4d4]/30">
+            <a class="flex flex-col items-center justify-center bg-[#9d8af2]/30 text-primary rounded-full px-5 py-1.5 shadow-sm transition-all" href="#">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+                <span class="font-label-sm text-[10px] mt-0.5 font-semibold">Home</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors px-4" href="#" onclick="alert('முதலில் உங்கள் பிரிவைத் தேர்வு செய்யவும்!')">
+                <span class="material-symbols-outlined">school</span>
+                <span class="font-label-sm text-[10px] mt-0.5 font-semibold">Learning</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors px-4" href="#" onclick="alert('முதலில் உங்கள் பிரிவைத் தேர்வு செய்யவும்!')">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-label-sm text-[10px] mt-0.5 font-semibold">Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Dashboard Screen (App Main View) -->
+    <div id="dashboard-screen" class="screen hidden dashboard-body">
+        <!-- Dashboard Top Header Bar -->
+        <header class="bg-white/80 backdrop-blur-md sticky top-0 left-0 right-0 z-30 border-b border-surface-container py-4 px-6 flex items-center justify-between max-w-[420px] mx-auto shadow-sm">
+            <div class="flex items-center gap-3">
+                <button onclick="goBackToSelection()" class="text-primary hover:bg-[#f4f3fb] p-2 rounded-full transition-all flex items-center justify-center">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <div>
+                    <h2 class="text-xs text-on-surface-variant">வணக்கம்!</h2>
+                    <h1 class="text-lg font-bold text-primary font-headline" id="dashboard-user-greeting">அன்பான பயனர்</h1>
+                </div>
+            </div>
+            <!-- Avatar -->
+            <div class="w-10 h-10 rounded-full border border-primary/20 overflow-hidden shadow-sm">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUuFb70WyLlloC7lHWljzHCI-JNd4hbAmDINiTkE07v6tAjPcv6TRFV0Sb0KHTMdxYbev-bTPSh3zgOLBD76tDfXSUb9WYhk0X-S1PY1s1BhgvCDX0KLsyOCc2PfauJ5k78BWGX1iXnsndMDgNaI8z0IWw7p3qcjcRv0QBQGBRIRTjE86es5OY5B8GlcsWArHZ2zBsRQV6BufLofwH3Jul1RxpeKAbW9wLiI0Fkv19Iii5Gp1LnG3pGZWyHRofMVG3DeAh3x9StHU" class="w-full h-full object-cover" alt="Avatar"/>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content Container -->
+        <main class="w-full max-w-[420px] mx-auto p-5 pb-24 space-y-6">
+            
+            <!-- Welcome banner (Dynamic content) -->
+            <div class="bg-gradient-to-r from-primary to-[#87d2fe] text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="relative z-10 space-y-2">
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">சிந்தனைக்களம்</span>
+                    <h3 class="text-xl font-bold font-headline" id="dashboard-banner-title">"மின்னொளி வழிகாட்டி"</h3>
+                    <p class="text-sm text-white/85" id="dashboard-banner-desc">வெற்றிக்கான தளம்</p>
+                </div>
+                <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+            </div>
+
+            <!-- Categories Grid (Dynamic Categories) -->
+            <section class="space-y-4">
+                <h4 class="text-[#614eb2] font-bold text-lg border-l-4 border-primary pl-2 font-headline">பரிந்துரைக்கப்படும் சேவைகள்</h4>
+                
+                <div id="services-grid" class="grid grid-cols-2 gap-4">
+                    <!-- Dynamic Service Cards injected by JS -->
+                </div>
+            </section>
+
+            <!-- Latest News / Tips Section -->
+            <section class="space-y-4">
+                <h4 class="text-[#614eb2] font-bold text-lg border-l-4 border-primary pl-2 font-headline">புதிய தகவல்கள்</h4>
+                <div id="news-list" class="space-y-3">
+                    <!-- Dynamic News Items injected by JS -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Fixed Bottom Navigation Bar -->
+        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] bg-white/95 backdrop-blur-md border-t border-surface-container-highest py-3 px-6 flex justify-around items-center z-40 rounded-t-3xl shadow-[0_-8px_24px_rgba(97,78,178,0.06)]">
+            <button onclick="changeTab('home')" class="flex flex-col items-center gap-0.5 text-primary">
+                <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">home</span>
+                <span class="text-[10px] font-semibold">முகப்பு</span>
+            </button>
+            <button id="nav-btn-learn" onclick="triggerLearnModal()" class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-primary transition-all">
+                <span class="material-symbols-outlined text-2xl">menu_book</span>
+                <span class="text-[10px] font-semibold">கல்வி</span>
+            </button>
+            <button id="nav-btn-skills" onclick="triggerSkillsModal()" class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-primary transition-all">
+                <span class="material-symbols-outlined text-2xl">local_mall</span>
+                <span class="text-[10px] font-semibold">பயிற்சிகள்</span>
+            </button>
+            <button onclick="openModal('helpline')" class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-primary transition-all">
+                <span class="material-symbols-outlined text-2xl">contact_support</span>
+                <span class="text-[10px] font-semibold">உதவி</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Reusable Detail Modal (Popup Viewer) -->
+    <div id="detail-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white rounded-3xl w-full max-w-[380px] p-6 shadow-2xl transform scale-95 transition-all duration-300 relative">
+            <!-- Close button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-all flex items-center justify-center">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            
+            <!-- Title -->
+            <h3 id="modal-title" class="text-xl font-bold text-primary font-headline mb-4 pr-8 border-b pb-2">பிரிவு தலைப்பு</h3>
+            
+            <!-- Scrollable Content container -->
+            <div id="modal-body" class="space-y-4 max-h-[350px] overflow-y-auto pr-2 font-body text-on-surface">
+                <!-- Dynamic Content goes here -->
+            </div>
+            
+            <!-- Action Button -->
+            <div class="mt-6 pt-4 border-t">
+                <button onclick="closeModal()" class="w-full bg-primary text-on-primary py-3.5 rounded-full font-bold shadow-md hover:opacity-90 transition-all font-headline">
+                    சரி / மூடுக
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUserName = '';
+        let currentUserRole = ''; // 'women' or 'students'
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const splashScreen = document.getElementById('splash-screen');
+            const loginScreen = document.getElementById('login-screen');
+            const glassCard = document.querySelector('.glass-card');
+            const loginForm = document.getElementById('login-form');
+            
+            // Subtle tilt effect on mouse move for desktop (splash card)
+            if (window.innerWidth > 768 && glassCard) {
+                document.addEventListener('mousemove', (e) => {
+                    const x = (window.innerWidth / 2 - e.pageX) / 45;
+                    const y = (window.innerHeight / 2 - e.pageY) / 45;
+                    glassCard.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+                });
+            }
+
+            // Click anywhere on splash screen or glass card to transition to login
+            splashScreen.addEventListener('click', () => {
+                splashScreen.classList.remove('visible');
+                splashScreen.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+                loginScreen.classList.add('visible');
+            });
+
+            // Login submission transitions to Selection page
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    currentUserName = document.getElementById('username-input').value.trim();
+                    
+                    // Welcome greeting on Selection screen
+                    document.getElementById('selection-user-greeting').textContent = `வணக்கம், ${currentUserName}!`;
+                    
+                    // Button logging-in spinner state
+                    const btn = loginForm.querySelector('button[type="submit"]');
+                    const originalBtnText = btn.textContent;
+                    btn.innerHTML = `<span class="inline-block animate-pulse">உள்நுழைகிறது...</span>`;
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalBtnText;
+                        btn.disabled = false;
+                        
+                        // Transition to Selection Screen
+                        loginScreen.classList.remove('visible');
+                        loginScreen.classList.add('hidden');
+                        
+                        const selectionScreen = document.getElementById('selection-screen');
+                        selectionScreen.classList.remove('hidden');
+                        selectionScreen.classList.add('visible');
+                    }, 800);
+                });
+            }
+
+            // Micro-interactions for input focus
+            const inputs = document.querySelectorAll('.clay-inset');
+            inputs.forEach(input => {
+                const field = input.querySelector('input');
+                if (field) {
+                    field.addEventListener('focus', () => {
+                        input.style.transform = 'scale(1.02)';
+                        input.style.backgroundColor = 'white';
+                        input.style.boxShadow = '0 6px 15px rgba(97, 78, 178, 0.08)';
+                        input.style.borderColor = '#614eb2';
+                    });
+                    field.addEventListener('blur', () => {
+                        input.style.transform = 'scale(1)';
+                        input.style.backgroundColor = '#f4f3fb';
+                        input.style.boxShadow = '';
+                        input.style.borderColor = 'rgba(97, 78, 178, 0.05)';
+                    });
+                }
+            });
+        });
+
+        // Go Back from Selection to Login
+        function goBackToLogin() {
+            const selectionScreen = document.getElementById('selection-screen');
+            const loginScreen = document.getElementById('login-screen');
+            
+            selectionScreen.classList.remove('visible');
+            selectionScreen.classList.add('hidden');
+            
+            loginScreen.classList.remove('hidden');
+            loginScreen.classList.add('visible');
+        }
+
+        // Go Back from Dashboard to Selection
+        function goBackToSelection() {
+            const dashboardScreen = document.getElementById('dashboard-screen');
+            const selectionScreen = document.getElementById('selection-screen');
+            
+            dashboardScreen.classList.remove('visible');
+            dashboardScreen.classList.add('hidden');
+            
+            selectionScreen.classList.remove('hidden');
+            selectionScreen.classList.add('visible');
+        }
+
+        // Selection Handlers (Women / Students)
+        function selectUserRole(role) {
+            currentUserRole = role;
+            
+            const dashboardGreeting = document.getElementById('dashboard-user-greeting');
+            const bannerTitle = document.getElementById('dashboard-banner-title');
+            const bannerDesc = document.getElementById('dashboard-banner-desc');
+            const servicesGrid = document.getElementById('services-grid');
+            const newsList = document.getElementById('news-list');
+            const navBtnLearn = document.getElementById('nav-btn-learn');
+            const navBtnSkills = document.getElementById('nav-btn-skills');
+            
+            // Set dynamic greeting
+            dashboardGreeting.textContent = `${currentUserName}!`;
+
+            if (role === 'women') {
+                // Customize dashboard for Village Women
+                bannerTitle.textContent = `"மகளிர் தற்சார்பும் மேம்பாடும்"`;
+                bannerDesc.textContent = "கிராமப்புற பெண்களின் வாழ்வாதாரம் மற்றும் சுயதொழில் ஆலோசனைகள்.";
+                
+                // Update navigation text
+                navBtnLearn.querySelector('span:last-child').textContent = "அறிவுத் தளம்";
+                navBtnSkills.querySelector('span:last-child').textContent = "சுயதொழில்";
+                
+                // Grid Category Cards
+                servicesGrid.innerHTML = `
+                    <div onclick="openModal('skills_tailoring')" class="dashboard-card bg-[#fff1f2] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(186,26,26,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#ffdbe9] flex items-center justify-center text-[#ba1a1a] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">cut</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">தையல் பயிற்சி</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">இலவச தையல் வகுப்பு & தையல் இயந்திர வழிகாட்டுதல்</p>
+                        </div>
+                    </div>
+                    
+                    <div onclick="openModal('skills_handicrafts')" class="dashboard-card bg-[#faf5ff] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(97,78,178,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#e6deff] flex items-center justify-center text-[#614eb2] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">palette</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">கைவினைப் பொருட்கள்</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">கூடை பின்னுதல், மெழுகுவர்த்தி & சோப்பு தயாரிப்பு</p>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('women_schemes')" class="dashboard-card bg-[#fcfdfa] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(0,101,139,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#dcfce7] flex items-center justify-center text-[#15803d] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">அரசு திட்டங்கள்</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">முத்துலட்சுமி ரெட்டி திட்டம், மகளிர் குழு கடன்</p>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('helpline')" class="dashboard-card bg-[#fbfdff] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(0,101,139,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#dbeafe] flex items-center justify-center text-[#00658b] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">பாதுகாப்பு & உதவி</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">மகளிர் அவசர உதவி எண் 1091 மற்றும் ஆலோசனை</p>
+                        </div>
+                    </div>
+                `;
+
+                // News list for Women
+                newsList.innerHTML = `
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-surface-container">
+                        <span class="material-symbols-outlined text-3xl text-primary" style="font-variation-settings: 'FILL' 1;">campaign</span>
+                        <div class="flex-1">
+                            <h6 class="font-bold text-sm text-on-surface">இலவச தையல் இயந்திர விநியோகம்</h6>
+                            <p class="text-xs text-on-surface-variant">அரசு தையல் இயந்திர விண்ணப்பங்கள் விநியோகம். கடைசி தேதி ஜூன் 25.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-surface-container">
+                        <span class="material-symbols-outlined text-3xl text-green-600" style="font-variation-settings: 'FILL' 1;">payments</span>
+                        <div class="flex-1">
+                            <h6 class="font-bold text-sm text-on-surface">சுயஉதவிக் குழுக்கள் சுழல் நிதி</h6>
+                            <p class="text-xs text-on-surface-variant">புதிய மகளிர் குழுக்களுக்கான சுழல் நிதி மானியம் வங்கிகளில் வரவு வைக்கப்பட்டது.</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Customize dashboard for Students
+                bannerTitle.textContent = `"மாணவர் கல்வி வழிகாட்டி"`;
+                bannerDesc.textContent = "இலவச பாடப்புத்தகங்கள், உயர்கல்வி உதவித்தொகைகள் மற்றும் தட்டச்சு வகுப்புகள்.";
+                
+                // Update navigation text
+                navBtnLearn.querySelector('span:last-child').textContent = "பாடப்புத்தகங்கள்";
+                navBtnSkills.querySelector('span:last-child').textContent = "திறன் பயிற்சி";
+                
+                // Grid Category Cards
+                servicesGrid.innerHTML = `
+                    <div onclick="openModal('student_books')" class="dashboard-card bg-[#fffcf3] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(231,195,83,0.12)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#ffeec2] flex items-center justify-center text-[#735c00] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">library_books</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">பாடப்புத்தகங்கள்</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">1 முதல் 12-ஆம் வகுப்பு வரை இலவச சமச்சீர் கல்வி புத்தகங்கள் (PDF)</p>
+                        </div>
+                    </div>
+                    
+                    <div onclick="openModal('student_scholarships')" class="dashboard-card bg-[#faf5ff] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(97,78,178,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#e6deff] flex items-center justify-center text-[#614eb2] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">payments</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">உதவித்தொகைகள்</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">தேசிய மற்றும் மாநில அளவிலான கல்வி உதவித்தொகை தகவல்கள்</p>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('student_schemes')" class="dashboard-card bg-[#fcfdfa] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(0,101,139,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#dcfce7] flex items-center justify-center text-[#15803d] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">கல்வி நலத்திட்டங்கள்</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">இலவச மிதிவண்டி, மடிக்கணினி மற்றும் கல்வி ஊக்கத்தொகைகள்</p>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('student_counseling')" class="dashboard-card bg-[#fbfdff] p-3.5 flex flex-col justify-between min-h-[150px] shadow-[4px_4px_12px_rgba(0,101,139,0.08)]">
+                        <div class="w-12 h-12 rounded-2xl bg-[#dbeafe] flex items-center justify-center text-[#00658b] shadow-sm">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">school</span>
+                        </div>
+                        <div class="space-y-1 mt-3">
+                            <h5 class="font-bold text-on-surface text-sm font-headline">உயர்கல்வி வழிகாட்டி</h5>
+                            <p class="text-xs text-on-surface-variant leading-tight opacity-90">12ஆம் வகுப்பிற்கு பின் என்ன படிக்கலாம்? வேலைவாய்ப்பு ஆலோசனைகள்</p>
+                        </div>
+                    </div>
+                `;
+
+                // News list for Students
+                newsList.innerHTML = `
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-surface-container">
+                        <span class="material-symbols-outlined text-3xl text-primary" style="font-variation-settings: 'FILL' 1;">campaign</span>
+                        <div class="flex-1">
+                            <h6 class="font-bold text-sm text-on-surface">புதுமைப் பெண் உதவித்தொகை விண்ணப்பம்</h6>
+                            <p class="text-xs text-on-surface-variant">உயர்கல்வி பயிலும் மாணவிகளுக்கான மாதந்திர ₹1,000 உதவித்தொகை பதிவு தொடங்கியது.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-surface-container">
+                        <span class="material-symbols-outlined text-3xl text-orange-400" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                        <div class="flex-1">
+                            <h6 class="font-bold text-sm text-on-surface">14417 இலவச மாணவர் உதவி எண்</h6>
+                            <p class="text-xs text-on-surface-variant">கல்வி வழிகாட்டுதல் மற்றும் தேர்வு பயம் போக்க 24 மணி நேர இலவச உளவியல் ஆலோசனை.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Transition from Selection Screen to Dashboard
+            const selectionScreen = document.getElementById('selection-screen');
+            const dashboardScreen = document.getElementById('dashboard-screen');
+            
+            selectionScreen.classList.remove('visible');
+            selectionScreen.classList.add('hidden');
+            
+            dashboardScreen.classList.remove('hidden');
+            dashboardScreen.classList.add('visible');
+        }
+
+        // Bottom Navigation Tab links handling
+        function triggerLearnModal() {
+            if (currentUserRole === 'women') {
+                openModal('women_schemes');
+            } else {
+                openModal('student_books');
+            }
+        }
+
+        function triggerSkillsModal() {
+            if (currentUserRole === 'women') {
+                openModal('skills_tailoring');
+            } else {
+                openModal('student_scholarships');
+            }
+        }
+
+        // Modals Database
+        const modalData = {
+            // Women Detailed Content
+            skills_tailoring: {
+                title: "இலவச தையல் பயிற்சி",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#fff1f2] border border-[#ba1a1a]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#ba1a1a] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">cut</span>தையல் வகுப்பு சேர்க்கை</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">கிராமப்புற மகளிருக்கு சுயதொழில் தொடங்குவதற்கான 3 மாத இலவச தையல் பயிற்சி மற்றும் தையல் சான்றிதழ்.</p>
+                        </div>
+                        <div class="p-3 bg-[#f5f3ff] border border-[#614eb2]/10 rounded-2xl">
+                            <h4 class="font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">assignment</span>தேவையான ஆவணங்கள்</h4>
+                            <p class="text-xs text-[#484552] mt-1">1. ஆதார் அட்டை நகல்<br>2. ரேஷன் கார்டு நகல்<br>3. கல்விச் சான்றிதழ் (குறைந்தது 8-ஆம் வகுப்பு)</p>
+                        </div>
+                        <div class="p-3 bg-[#f0fdf4] border border-[#15803d]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#15803d] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">style</span>இலவச தையல் இயந்திரம்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">பயிற்சி முடித்தவுடன் அரசு வழங்கும் இலவச தையல் இயந்திரத்திற்கு விண்ணப்பிக்கும் முறைகள்.</p>
+                        </div>
+                    </div>
+                `
+            },
+            skills_handicrafts: {
+                title: "கைவினைப் பயிற்சிகள் & சிறுதொழில்",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#faf5ff] border border-[#614eb2]/10 rounded-2xl">
+                            <h4 class="font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">shopping_bag</span>கூடை மற்றும் சணல் பை தயாரிப்பு</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">கைவினைப் பொருட்கள், சணல் பைகள், அலங்காரப் பொருட்கள் தயாரிப்பதற்கான நேரடி மற்றும் ஆன்லைன் இலவச வீடியோ பயிற்சிகள்.</p>
+                        </div>
+                        <div class="p-3 bg-[#fffce8] border border-[#e7c353]/30 rounded-2xl">
+                            <h4 class="font-bold text-[#735c00] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">currency_rupee</span>சுயஉதவிக் குழுக்கள் வங்கிக் கடன்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">மகளிர் சுயஉதவிக் குழுக்கள் (Self Help Groups) மூலமாக மிகக் குறைந்த வட்டியில் சிறுதொழில் தொடங்க முத்ரா கடன் பெறுவது எப்படி?</p>
+                        </div>
+                    </div>
+                `
+            },
+            women_schemes: {
+                title: "அரசு மகளிர் நலத்திட்டங்கள்",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#f0fdf4] border border-[#15803d]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#15803d] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">verified_user</span>முத்துலட்சுமி ரெட்டி மகப்பேறு திட்டம்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">கர்ப்பிணிப் பெண்களுக்கு ₹18,000 நிதியுதவி வழங்கும் அரசு திட்டம் மற்றும் அதன் கட்டங்கள்.</p>
+                        </div>
+                        <div class="p-3 bg-[#fff1f2] border border-[#ba1a1a]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#ba1a1a] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">female</span>বিধবা ஓய்வூதியத் திட்டம் (Widow Pension)</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">ஆதரவற்ற மற்றும் விதவை பெண்களுக்கு அரசு வழங்கும் மாத ஓய்வூதிய திட்ட விவரங்கள்.</p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // Students Detailed Content
+            student_books: {
+                title: "இலவச பாடப்புத்தகங்கள் (PDF)",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#fffcf3] border border-[#e7c353]/30 rounded-2xl">
+                            <h4 class="font-bold text-[#735c00] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">download</span>சமச்சீர் கல்வி நூல்கள்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">1-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரையிலான அனைத்து பாடப்புத்தகங்களின் தமிழ் & ஆங்கில வழி PDF கோப்புகள் இலவசப் பதிவிறக்கம்.</p>
+                        </div>
+                        <div class="p-3 bg-[#f5f3ff] border border-[#614eb2]/10 rounded-2xl">
+                            <h4 class="font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">menu_book</span>முக்கிய வழிகாட்டி குறிப்புகள்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">பொதுத்தேர்வு எழுதும் 10, 11 மற்றும் 12-ஆம் வகுப்பு மாணவர்களுக்கான முக்கிய வினாவிடைகள் மற்றும் கையேடுகள்.</p>
+                        </div>
+                    </div>
+                `
+            },
+            student_scholarships: {
+                title: "கல்வி உதவித்தொகை (Scholarships)",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#faf5ff] border border-[#614eb2]/10 rounded-2xl">
+                            <h4 class="font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">workspace_premium</span>முதலமைச்சர் கல்வி உதவித்தொகை</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">பள்ளி மற்றும் கல்லூரியில் படிக்கும் ஏழை மாணவர்களுக்கான மாநில அரசின் பல்வேறு கல்வி உதவித்தொகை திட்டங்கள்.</p>
+                        </div>
+                        <div class="p-3 bg-[#eff6ff] border border-[#00658b]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#00658b] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">school</span>தேசிய கல்வி உதவித்தொகை (NSP)</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">மத்திய அரசு வழங்கும் தகுதி மற்றும் வருவாய் அடிப்படையிலான தேசிய உதவித்தொகை இணையதளப் பதிவுகள்.</p>
+                        </div>
+                    </div>
+                `
+            },
+            student_schemes: {
+                title: "அரசு மாணவர் கல்வி திட்டங்கள்",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#f0fdf4] border border-[#15803d]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#15803d] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">verified_user</span>புதுமைப் பெண் திட்டம்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">அரசுப் பள்ளியில் படித்து கல்லூரி சேரும் மாணவிகளுக்கு மாதந்தோறும் ₹1,000 வழங்கும் திட்டம்.</p>
+                        </div>
+                        <div class="p-3 bg-[#eff6ff] border border-[#00658b]/10 rounded-2xl">
+                            <h4 class="font-bold text-[#00658b] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">devices</span>இலவச மடிக்கணினி & சைக்கிள்</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">அரசு மற்றும் அரசு உதவிபெறும் பள்ளி மாணவர்களுக்கான இலவச லேப்டாப் மற்றும் மிதிவண்டி விநியோகத் தகுதிகள்.</p>
+                        </div>
+                    </div>
+                `
+            },
+            student_counseling: {
+                title: "உயர்கல்வி & வேலைவாய்ப்பு வழிகாட்டுதல்",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#f5f3ff] border border-[#614eb2]/10 rounded-2xl">
+                            <h4 class="font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">explore</span>12-க்கு பின் உயர்கல்வி</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">கலை, அறிவியல், பொறியியல், மருத்துவம் மற்றும் தொழிற்கல்வி படிப்புகள் பற்றிய முழு விவரங்கள் மற்றும் கல்லூரிகள் சேர்க்கை ஆலோசனைகள்.</p>
+                        </div>
+                        <div class="p-3 bg-[#fffcf3] border border-[#e7c353]/30 rounded-2xl">
+                            <h4 class="font-bold text-[#735c00] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">psychology</span>தேர்வு மன அழுத்த ஆலோசனை</h4>
+                            <p class="text-xs text-on-surface-variant mt-1">தேர்வு பயம் போக்க மற்றும் சிறந்த மனநிலையை வளர்க்க வழிகாட்டும் இலவச ஆலோசனைகள்.</p>
+                        </div>
+                    </div>
+                `
+            },
+
+            // Common Helplines
+            helpline: {
+                title: "அவசர உதவி எண்கள்",
+                body: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-[#fff5f5] border border-red-200 rounded-2xl flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-red-600 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">female</span>மகளிர் உதவி எண்</h4>
+                                <p class="text-xs text-on-surface-variant mt-1">பெண்கள் பாதுகாப்பு மற்றும் அவசர உதவிகளுக்கு 24 மணி நேர சேவை.</p>
+                            </div>
+                            <a href="tel:1091" class="bg-red-500 hover:bg-red-600 text-white p-2.5 rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-sm">call</span>
+                            </a>
+                        </div>
+                        <div class="p-3 bg-[#f5f3ff] border border-[#614eb2]/10 rounded-2xl flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">support</span>மாணவர் வழிகாட்டுதல் (14417)</h4>
+                                <p class="text-xs text-on-surface-variant mt-1">பள்ளிக் கல்வித்துறை வழங்கும் இலவச கல்வி வழிகாட்டி மற்றும் உளவியல் ஆலோசனை எண்.</p>
+                            </div>
+                            <a href="tel:14417" class="bg-primary hover:bg-[#503ea0] text-white p-2.5 rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-sm">call</span>
+                            </a>
+                        </div>
+                        <div class="p-3 bg-[#f0fdf4] border border-[#15803d]/10 rounded-2xl flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-[#15803d] flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">child_care</span>குழந்தைகள் உதவி எண்</h4>
+                                <p class="text-xs text-on-surface-variant mt-1">குழந்தை திருமண தடுத்தல் மற்றும் குழந்தைகள் பாதுகாப்பு உதவி எண்.</p>
+                            </div>
+                            <a href="tel:1098" class="bg-green-600 hover:bg-green-700 text-white p-2.5 rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-sm">call</span>
+                            </a>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // Open modal by ID
+        function openModal(key) {
+            const data = modalData[key];
+            if (!data) return;
+            
+            const modal = document.getElementById('detail-modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            const modalBox = modal.querySelector('div');
+            
+            title.textContent = data.title;
+            body.innerHTML = data.body;
+            
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('detail-modal');
+            const modalBox = modal.querySelector('div');
+            
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+        }
+
+        // Handle tabs
+        function changeTab(tabName) {
+            if (tabName === 'home') {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
